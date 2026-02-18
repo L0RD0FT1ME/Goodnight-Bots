@@ -2,7 +2,7 @@ import datetime
 from collections import Counter
 from difflib import SequenceMatcher
 
-COMMON_BOT_PHRASES = ["check my bio", "crypto giveaway", "DM for collab"]
+COMMON_BOT_PHRASES = ["check my bio", "crypto giveaway", "DM for collab", "Click the link...", "Enter to win..."]
 
 def similarity(a, b):
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
