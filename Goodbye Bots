@@ -1,0 +1,23 @@
+import datetime
+from collections import Counter
+from difflib import SequenceMatcher
+
+COMMON_BOT_PHRASES = ["check my bio", "crypto giveaway", "DM for collab"]
+
+def similarity(a, b):
+    return SequenceMatcher(None, a.lower(), b.lower()).ratio()
+
+def bot_phrase_score(posts):
+    return max(similarity(p, bp) for p in posts for bp in COMMON_BOT_PHRASES)
+
+def cross_platform_overlap(posts_a, posts_b):
+    return len(set(posts_a) & set(posts_b)) / max(len(posts_a), 1)
+
+def authenticity_score(account):
+    age_days = (datetime.date.today() - account["created"]).days
+    age_factor = min(age_days / 3650, 1)  # cap at ~10 yrs
+
+    bot_score = bot_phrase_score(account["posts"])
+    cross_score = cross_platform_overlap(account["posts"], account["other_platform_posts"])
+
+    return round(age_factor * (1 - bot_score) * (1 - cross_score), 3)
